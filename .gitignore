@@ -1,0 +1,12 @@
+node_modules
+.next
+dist
+.vite
+.turbo
+coverage
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+!.env.local.example

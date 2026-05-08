@@ -1,0 +1,298 @@
+/* ──── Fonts ──── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --hermes-gold: #eab308;
+  --hermes-gold-dim: rgba(234, 179, 8, 0.15);
+  --terminal-green: #39ff14;
+  --terminal-amber: #ffbf00;
+  --void-bg: #060a0f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--void-bg);
+  color: #e2e8f0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ──── Background grid + radial glow ──── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(rgba(234, 179, 8, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(234, 179, 8, 0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(234, 179, 8, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(57, 255, 20, 0.04) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* ──── CRT scanline effect (subtle) ──── */
+.crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  opacity: 0.4;
+}
+
+/* ──── Terminal-style panels ──── */
+.terminal-panel {
+  background: rgba(6, 10, 15, 0.85);
+  border: 1px solid rgba(234, 179, 8, 0.12);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 0 0 1px rgba(234, 179, 8, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.terminal-panel-header {
+  border-bottom: 1px solid rgba(234, 179, 8, 0.08);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-panel-header::before {
+  content: '';
+  display: inline-flex;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--hermes-gold);
+  box-shadow: 0 0 6px var(--hermes-gold);
+  animation: glow-dot 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow-dot {
+  0% { opacity: 0.6; box-shadow: 0 0 4px var(--hermes-gold); }
+  100% { opacity: 1; box-shadow: 0 0 10px var(--hermes-gold); }
+}
+
+/* ──── Blinking cursor ──── */
+.blinking-cursor::after {
+  content: '▊';
+  animation: blink-cursor 1s step-end infinite;
+  color: var(--hermes-gold);
+  font-weight: 400;
+  margin-left: 1px;
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ──── Scrollbar ──── */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(234, 179, 8, 0.25) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(234, 179, 8, 0.2);
+  border-radius: 999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 179, 8, 0.35);
+}
+
+/* ──── Prose / Markdown ──── */
+.prose-stream {
+  word-break: break-word;
+}
+
+.prose-stream pre {
+  white-space: pre-wrap;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(234, 179, 8, 0.08);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.prose-stream code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+}
+
+.prose-stream :not(pre) > code {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.12);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: #fde047;
+}
+
+.prose-stream h1,
+.prose-stream h2,
+.prose-stream h3 {
+  color: #fef9c3;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.prose-stream h1 { font-size: 1.25rem; }
+.prose-stream h2 { font-size: 1.1rem; }
+.prose-stream h3 { font-size: 1rem; }
+
+.prose-stream p {
+  margin: 6px 0;
+}
+
+.prose-stream ul,
+.prose-stream ol {
+  padding-left: 1.5rem;
+  margin: 6px 0;
+}
+
+.prose-stream li {
+  margin: 2px 0;
+}
+
+.prose-stream a {
+  color: #fde047;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-stream blockquote {
+  border-left: 3px solid rgba(234, 179, 8, 0.3);
+  padding-left: 12px;
+  margin: 8px 0;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.prose-stream table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+  font-size: 0.85rem;
+}
+
+.prose-stream th,
+.prose-stream td {
+  border: 1px solid rgba(234, 179, 8, 0.1);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.prose-stream th {
+  background: rgba(234, 179, 8, 0.06);
+  color: #fef9c3;
+  font-weight: 500;
+}
+
+.prose-stream hr {
+  border: none;
+  border-top: 1px solid rgba(234, 179, 8, 0.1);
+  margin: 12px 0;
+}
+
+/* ──── Glow input focus ──── */
+.glow-focus:focus-within {
+  border-color: rgba(234, 179, 8, 0.4);
+  box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.08), 0 0 20px rgba(234, 179, 8, 0.06);
+}
+
+/* ──── Button base ──── */
+button,
+textarea,
+input {
+  font: inherit;
+}
+
+/* ──── Status bar ──── */
+.status-bar {
+  background: rgba(6, 10, 15, 0.95);
+  border-top: 1px solid rgba(234, 179, 8, 0.1);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+/* ──── Tool log terminal style ──── */
+.tool-log-entry {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.tool-log-entry .prompt::before {
+  content: '$ ';
+  color: var(--terminal-green);
+}
+
+/* ──── ASCII glow text ──── */
+.ascii-glow {
+  text-shadow:
+    0 0 5px rgba(234, 179, 8, 0.4),
+    0 0 20px rgba(234, 179, 8, 0.15);
+}
+
+/* ──── Neon badge ──── */
+.neon-badge {
+  text-shadow: 0 0 8px currentColor;
+}
+
+/* ──── Typing animation helper ──── */
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typewriter-reveal 2s steps(40, end);
+}
+
+@keyframes typewriter-reveal {
+  0% { max-width: 0; }
+  100% { max-width: 100%; }
+}
